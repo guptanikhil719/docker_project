@@ -1,0 +1,32 @@
+version : '3.1'
+
+services:
+  joomladb:
+    image:mysql:5.7
+    volumes:
+      -mysql_storage:/var/lib/mysql
+    restart:always
+    environment:
+      MYSQL_ROOT_PASSWORD:joomla
+      MYSQL_USER:nikhil
+      MYSQL_PASSWORD:nikhil
+      MYSQL_DATABASE:joomla_db
+
+  joomlaos:
+    image:joomla:3.9-php7.2-apache
+    restart:always
+    depends_on:
+      -joomladb
+    ports:
+      -80:80
+    environment:
+      JOOMLA_DB_HOST:db
+      JOOMLA_DB_USER:nikhil
+      JOOMLA_DB_PASSWORD:nikhil
+      JOOMLA_DB_NAME:joomla_db
+    volumes:
+      - jm_storage:/var/www/html
+
+volumes:
+  mysql_storage:
+  jm_storage:
